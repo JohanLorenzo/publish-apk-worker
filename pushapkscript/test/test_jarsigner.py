@@ -14,11 +14,6 @@ class JarSignerTest(unittest.TestCase):
         self.context.config = {
             'jarsigner_binary': '/path/to/jarsigner',
             'jarsigner_key_store': '/path/to/keystore',
-            'jarsigner_certificate_aliases': {
-                'aurora': 'aurora_alias',
-                'beta': 'beta_alias',
-                'release': 'release_alias',
-            }
         }
 
         self.minimal_context = MagicMock()
@@ -27,7 +22,7 @@ class JarSignerTest(unittest.TestCase):
         }
 
     def test_verify_should_call_executable_with_right_arguments(self):
-        for channel, alias in self.context.config['jarsigner_certificate_aliases'].items():
+        for channel, alias in jarsigner.CERTIFICATE_ALIASES.items():
             with patch('subprocess.run') as run:
                 run.return_value = MagicMock()
                 run.return_value.returncode = 0
@@ -55,30 +50,12 @@ class JarSignerTest(unittest.TestCase):
             with self.assertRaises(SignatureError):
                 jarsigner.verify(self.context, '/path/to/apk', channel='aurora')
 
-    def test_pluck_configuration_sets_every_argument(self):
+    def test_pluck_configuration(self):
         self.assertEqual(
             jarsigner._pluck_configuration(self.context),
-            (
-                '/path/to/jarsigner',
-                '/path/to/keystore',
-                {
-                    'aurora': 'aurora_alias',
-                    'beta': 'beta_alias',
-                    'release': 'release_alias',
-                }
-            )
+            ('/path/to/jarsigner', '/path/to/keystore', )
         )
-
-    def test_pluck_configuration_uses_defaults(self):
         self.assertEqual(
             jarsigner._pluck_configuration(self.minimal_context),
-            (
-                'jarsigner',
-                '/path/to/keystore',
-                {
-                    'aurora': 'nightly',
-                    'beta': 'nightly',
-                    'release': 'release',
-                }
-            )
+            ('jarsigner', '/path/to/keystore', )
         )

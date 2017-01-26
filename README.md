@@ -31,7 +31,12 @@ Add the nightly certificate to the java keystore:
 keytool -import -keystore ~/.keystores/mozilla-android -file pushapkscript/data/android-nightly.cer -alias nightly
 ```
 
-Note: The keystore location and the certificate alias will be used in the `config.json` section
+Please only use these aliases:
+
+* `release` for Firefox release
+* `nightly` for Firefox beta and aurora
+
+Note: The keystore location will be used in the `config.json` section
 
 #### config.json
     cp config_example.json config.json

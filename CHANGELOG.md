@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+Get rid of `"jarsigner_certificate_aliases"` in configuration. `jarsigner` aliases must now point to either `release` (for Firefox release) or `nightly` (for Firefox beta and aurora).
+
 ## 0.2.1
 Upgrade to scriptworker v2.0.0 (without Chain of Trust), which reports errors back to Treeherer.
 

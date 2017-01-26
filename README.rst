@@ -24,8 +24,31 @@ First, you need ``python>=3.5.0``.
     cd pushapkscript
     pip install pushapkscript
 
+Then you need to install
+`jarsigner <http://docs.oracle.com/javase/8/docs/technotes/tools/windows/jarsigner.html>`__
+(usually included with JDK).
+
 Configure
 ~~~~~~~~~
+
+Jarsigner
+^^^^^^^^^
+
+Add the nightly certificate to the java keystore:
+
+.. code:: sh
+
+    keytool -import -keystore ~/.keystores/mozilla-android -file pushapkscript/data/android-nightly.cer -alias nightly
+
+Please only use these aliases:
+
+-  ``release`` for Firefox release
+-  ``nightly`` for Firefox beta and aurora
+
+Note: The keystore location will be used in the ``config.json`` section
+
+config.json
+^^^^^^^^^^^
 
 ::
 
