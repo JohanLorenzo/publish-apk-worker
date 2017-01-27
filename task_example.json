@@ -29,7 +29,8 @@
   "routes": [],
   "schedulerId": "-",
   "scopes": [
-    "project:releng:googleplay:aurora"
+    "project:releng:pushapk:googleplay:aurora",
+    "project:releng:pushapk:cert:nightly"
   ],
   "tags": {},
   "taskGroupId": "CRzxWtujTYa2hOs20evVCA",
