@@ -2,22 +2,17 @@ import logging
 import subprocess
 
 from pushapkscript.exceptions import SignatureError
-from pushapkscript.task import SUPPORTED_CHANNELS
 
 log = logging.getLogger(__name__)
 
-CERTIFICATE_ALIASES = {
-    'aurora': 'nightly',
-    'beta': 'nightly',
-    'release': 'release'
-}
-# Make sure no alias channel is missing in the dict
-assert tuple(sorted(CERTIFICATE_ALIASES.keys())) == SUPPORTED_CHANNELS
+SUPPORTED_CERTIFICATE_ALIAS = ('nightly', 'release')
 
 
-def verify(context, apk_path, channel):
+def verify(context, apk_path, certificate_alias):
     binary_path, keystore_path = _pluck_configuration(context)
-    certificate_alias = CERTIFICATE_ALIASES[channel]
+
+    if certificate_alias not in SUPPORTED_CERTIFICATE_ALIAS:
+        raise SignatureError('Unknown certificate alias: {}. Please choose between: {}'.format(certificate_alias, SUPPORTED_CERTIFICATE_ALIAS))
 
     completed_process = subprocess.run([
         binary_path, '-verify', '-strict',

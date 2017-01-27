@@ -29,7 +29,7 @@ public%2Fbuild%2Ffennec-46.0a2.en-US.android-i386.apk'
           "deadline": "2015-05-08T18:15:59.010Z",
           "expires": "2016-05-08T18:15:59.010Z",
           "dependencies": ["DIYnEVJ_SaSLGWtd3_n3VA", "EZJ0suL7St65V_MM0iBhKw"],
-          "scopes": ["project:releng:googleplay:aurora"],
+          "scopes": ["project:releng:pushapk:googleplay:aurora", "project:releng:pushapk:cert:nightly"],
           "payload": {{
             "apks": {apks},
             "google_play_track": "alpha"

@@ -4,33 +4,47 @@ import os
 
 import scriptworker.client
 from pushapkscript.exceptions import TaskVerificationError
+from pushapkscript.jarsigner import SUPPORTED_CERTIFICATE_ALIAS
 
 
 log = logging.getLogger(__name__)
 
 
-GOOGLE_PLAY_SCOPE_PREFIX = 'project:releng:googleplay:'
-SUPPORTED_CHANNELS = ('aurora', 'beta', 'release')
+def _craft_scope_prefix(scope):
+    return ':'.join(('project', 'releng', 'pushapk', scope, ''))    # Leave trailling colon
+
+
+_SUPPORTED_CHANNELS = ('aurora', 'beta', 'release')
+_GOOGLE_PLAY_SCOPE_PREFIX = _craft_scope_prefix('googleplay')
+_CERTIFICATE_TYPE_SCOPE_PREFIX = _craft_scope_prefix('cert')
 
 
 def extract_channel(task):
-    channels = [
-        s[len(GOOGLE_PLAY_SCOPE_PREFIX):]
+    return _extract_value_from_scope(task, 'channel', _GOOGLE_PLAY_SCOPE_PREFIX, _SUPPORTED_CHANNELS)
+
+
+def extract_certificate_type(task):
+    return _extract_value_from_scope(task, 'certificate type', _CERTIFICATE_TYPE_SCOPE_PREFIX, SUPPORTED_CERTIFICATE_ALIAS)
+
+
+def _extract_value_from_scope(task, value_name, prefix, possible_values):
+    values = [
+        s[len(prefix):]
         for s in task['scopes']
-        if s.startswith(GOOGLE_PLAY_SCOPE_PREFIX)
+        if s.startswith(prefix)
     ]
 
-    log.info('Channel: %s', channels)
-    if len(channels) != 1:
-        raise TaskVerificationError('Only one channel can be used')
+    if len(values) != 1:
+        raise TaskVerificationError('Only one {0} can be used. {0}s provided: {1}'.format(value_name, values))
 
-    channel = channels[0]
-    if channel not in SUPPORTED_CHANNELS:
+    final_value = values[0]
+    if final_value not in possible_values:
         raise TaskVerificationError(
-            '"{}" is not a supported channel. Value must be in {}'. format(channel, SUPPORTED_CHANNELS)
+            '"{}" is not a supported {}. Value must be in {}'.format(final_value, value_name, possible_values)
         )
 
-    return channel
+    log.info('{}: {}'.format(value_name, final_value))
+    return final_value
 
 
 def validate_task_schema(context):

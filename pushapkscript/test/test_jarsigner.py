@@ -22,11 +22,11 @@ class JarSignerTest(unittest.TestCase):
         }
 
     def test_verify_should_call_executable_with_right_arguments(self):
-        for channel, alias in jarsigner.CERTIFICATE_ALIASES.items():
+        for alias in jarsigner.SUPPORTED_CERTIFICATE_ALIAS:
             with patch('subprocess.run') as run:
                 run.return_value = MagicMock()
                 run.return_value.returncode = 0
-                jarsigner.verify(self.context, '/path/to/apk', channel)
+                jarsigner.verify(self.context, '/path/to/apk', alias)
 
                 run.assert_called_with([
                     '/path/to/jarsigner', '-verify', '-strict', '-keystore', '/path/to/keystore', '/path/to/apk', alias
@@ -36,11 +36,16 @@ class JarSignerTest(unittest.TestCase):
         with patch('subprocess.run') as run:
             run.return_value = MagicMock()
             run.return_value.returncode = 0
-            jarsigner.verify(self.minimal_context, '/path/to/apk', channel='aurora')
+            jarsigner.verify(self.minimal_context, '/path/to/apk', certificate_alias='nightly')
 
             run.assert_called_with([
                 'jarsigner', '-verify', '-strict', '-keystore', '/path/to/keystore', '/path/to/apk', 'nightly'
             ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+
+    def test_should_refuse_unknown_alias(self):
+        for wrong_alias in ('unknown', 'aurora', 'beta'):
+            with self.assertRaises(SignatureError):
+                jarsigner.verify(self.minimal_context, '/path/to/apk', wrong_alias)
 
     def test_raises_error_when_return_code_is_not_0(self):
         with patch('subprocess.run') as run:
@@ -48,7 +53,7 @@ class JarSignerTest(unittest.TestCase):
             run.return_value.returncode = 1
 
             with self.assertRaises(SignatureError):
-                jarsigner.verify(self.context, '/path/to/apk', channel='aurora')
+                jarsigner.verify(self.context, '/path/to/apk', certificate_alias='release')
 
     def test_pluck_configuration(self):
         self.assertEqual(
