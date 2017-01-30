@@ -2,8 +2,10 @@ language: python
 python:
   - "3.5"
 
-jdk:
-  - oraclejdk8
+addons:
+  apt:
+    packages:
+      - openjdk-7-jdk
 
 env:
   - SKIP_NETWORK_TESTS=0
