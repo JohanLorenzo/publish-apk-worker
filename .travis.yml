@@ -5,17 +5,13 @@ language: python
 python:
   - "3.5"
 
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
-
 env:
   - SKIP_NETWORK_TESTS=0
 
 install:
     - travis_retry pip install tox
 script:
+    - jdk_switcher use oraclejdk8
     - tox -e py35
 after_success:
     - tox -e py35-coveralls
