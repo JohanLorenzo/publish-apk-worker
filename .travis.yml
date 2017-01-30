@@ -2,6 +2,9 @@ language: python
 python:
   - "3.5"
 
+jdk:
+  - openjdk7
+
 env:
   - SKIP_NETWORK_TESTS=0
 
