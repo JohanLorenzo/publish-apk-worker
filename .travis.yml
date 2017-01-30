@@ -5,7 +5,7 @@ python:
 addons:
   apt:
     packages:
-      - openjdk-7-jdk
+      - openjdk-8-jdk
 
 env:
   - SKIP_NETWORK_TESTS=0
