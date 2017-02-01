@@ -13,7 +13,7 @@ from scriptworker.context import Context
 from scriptworker.exceptions import ScriptWorkerTaskException
 
 from pushapkscript import jarsigner
-from pushapkscript.task import download_files, validate_task_schema, extract_channel
+from pushapkscript.task import download_files, validate_task_schema, extract_certificate_type
 from pushapkscript.utils import load_json
 from pushapkscript.googleplay import publish_to_googleplay
 
@@ -31,9 +31,9 @@ async def async_main(context):
     downloaded_apks = await download_files(context)
 
     log.info('Verifying APKs\' signatures...')
-    channel = extract_channel(context.task)
+    certificate_alias = extract_certificate_type(context.task)
     for _, apk_path in downloaded_apks.items():
-        jarsigner.verify(context, apk_path, channel)
+        jarsigner.verify(context, apk_path, certificate_alias)
 
     log.info('Pushing APKs to Google Play Store...')
     publish_to_googleplay(context, downloaded_apks)

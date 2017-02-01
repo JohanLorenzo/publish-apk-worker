@@ -5,10 +5,14 @@ from pushapkscript.exceptions import SignatureError
 
 log = logging.getLogger(__name__)
 
+SUPPORTED_CERTIFICATE_ALIAS = ('nightly', 'release')
 
-def verify(context, apk_path, channel):
-    binary_path, keystore_path, certificate_aliases = _pluck_configuration(context)
-    certificate_alias = certificate_aliases[channel]
+
+def verify(context, apk_path, certificate_alias):
+    binary_path, keystore_path = _pluck_configuration(context)
+
+    if certificate_alias not in SUPPORTED_CERTIFICATE_ALIAS:
+        raise SignatureError('Unknown certificate alias: {}. Please choose between: {}'.format(certificate_alias, SUPPORTED_CERTIFICATE_ALIAS))
 
     completed_process = subprocess.run([
         binary_path, '-verify', '-strict',
@@ -29,10 +33,5 @@ def _pluck_configuration(context):
     keystore_path = context.config['jarsigner_key_store']
     # Uses jarsigner in PATH if config doesn't provide it
     binary_path = context.config.get('jarsigner_binary', 'jarsigner')
-    certificate_aliases = context.config.get('jarsigner_certificate_aliases', {
-        'aurora': 'nightly',
-        'beta': 'nightly',
-        'release': 'release'
-    })
 
-    return binary_path, keystore_path, certificate_aliases
+    return binary_path, keystore_path

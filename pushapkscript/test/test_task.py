@@ -2,7 +2,8 @@ import unittest
 import asynctest
 
 from pushapkscript.script import get_default_config
-from pushapkscript.task import validate_task_schema, download_files, extract_channel
+from pushapkscript.task import validate_task_schema, download_files, extract_channel, extract_certificate_type, \
+    _craft_scope_prefix, _GOOGLE_PLAY_SCOPE_PREFIX, _CERTIFICATE_TYPE_SCOPE_PREFIX
 from pushapkscript.exceptions import TaskVerificationError
 
 from scriptworker.context import Context
@@ -35,16 +36,21 @@ class TaskTest(unittest.TestCase):
 
         validate_task_schema(self.context)
 
+    def test_craft_scope_prefix(self):
+        self.assertEqual(_craft_scope_prefix('dummy'), 'project:releng:pushapk:dummy:')
+        self.assertEqual(_GOOGLE_PLAY_SCOPE_PREFIX, 'project:releng:pushapk:googleplay:')
+        self.assertEqual(_CERTIFICATE_TYPE_SCOPE_PREFIX, 'project:releng:pushapk:cert:')
+
     def test_extract_supported_channels(self):
         data = ({
-            'task': {'scopes': ['project:releng:googleplay:aurora']},
-            'expected': 'aurora'
+            'task': {'scopes': ['project:releng:pushapk:googleplay:aurora']},
+            'expected': 'aurora',
         }, {
-            'task': {'scopes': ['project:releng:googleplay:beta']},
-            'expected': 'beta'
+            'task': {'scopes': ['project:releng:pushapk:googleplay:beta']},
+            'expected': 'beta',
         }, {
-            'task': {'scopes': ['project:releng:googleplay:release']},
-            'expected': 'release'
+            'task': {'scopes': ['project:releng:pushapk:googleplay:release']},
+            'expected': 'release',
         })
 
         for item in data:
@@ -53,14 +59,33 @@ class TaskTest(unittest.TestCase):
     def test_extract_channel_fails_when_too_many_channels_are_given(self):
         with self.assertRaises(TaskVerificationError):
             extract_channel({
-                'scopes': ['project:releng:googleplay:beta', 'project:releng:googleplay:release']
+                'scopes': ['project:releng:pushapk:googleplay:beta', 'project:releng:pushapk:googleplay:release']
             })
 
     def test_extract_channel_fails_when_given_unsupported_channel(self):
         with self.assertRaises(TaskVerificationError):
             extract_channel({
-                'scopes': ['project:releng:googleplay:unexistingchannel']
+                'scopes': ['project:releng:pushapk:googleplay:unexistingchannel']
             })
+
+    def test_extract_supported_certificates(self):
+        data = ({
+            'task': {'scopes': ['project:releng:pushapk:cert:nightly']},
+            'expected': 'nightly',
+        }, {
+            'task': {'scopes': ['project:releng:pushapk:cert:release']},
+            'expected': 'release',
+        })
+
+        for item in data:
+            self.assertEqual(extract_certificate_type(item['task']), item['expected'])
+
+    def test_extract_supported_certificates_fails_when_given_unsupported_channel(self):
+        for wrong_cert in ('unknown', 'aurora', 'beta'):
+            with self.assertRaises(TaskVerificationError):
+                extract_channel({
+                    'scopes': ['project:releng:pushapk:cert:{}'.format(wrong_cert)]
+                })
 
 
 class TaskTestAsync(asynctest.TestCase):

@@ -40,7 +40,7 @@ class GooglePlayTest(unittest.TestCase):
             'release': 'org.mozilla.firefox'
         }
         for channel, package_name in data.items():
-            self.context.task['scopes'] = ['project:releng:googleplay:{}'.format(channel)]
+            self.context.task['scopes'] = ['project:releng:pushapk:googleplay:{}'.format(channel)]
             self.assertEqual(craft_push_apk_config(self.context, self.apks), {
                 'service_account': '{}_account'.format(channel),
                 'credentials': '/path/to/{}.p12'.format(channel),
@@ -52,7 +52,7 @@ class GooglePlayTest(unittest.TestCase):
             })
 
     def test_craft_push_config_allows_committing_apks(self):
-        self.context.task['scopes'] = ['project:releng:googleplay:aurora']
+        self.context.task['scopes'] = ['project:releng:pushapk:googleplay:aurora']
         self.context.task['payload']['dry_run'] = False
         config = craft_push_apk_config(self.context, self.apks)
         self.assertFalse(config['dry_run'])
