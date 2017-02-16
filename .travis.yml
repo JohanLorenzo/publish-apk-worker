@@ -12,6 +12,7 @@ install:
     - travis_retry pip install tox
 script:
     - jdk_switcher use openjdk7
+    - java -version
     - tox -e py35
 after_success:
     - tox -e py35-coveralls
