@@ -63,13 +63,15 @@ def test_extract_architecture_from_paths():
 
 
 def test_check_architectures_are_valid():
-    _check_architectures_are_valid(['x86', 'armv7_v15'])  # No failure expected
+    _check_architectures_are_valid(['x86', 'armv7_v15'], 'aurora')
+    _check_architectures_are_valid(['x86', 'armv7_v15'], 'beta')
+    _check_architectures_are_valid(['x86', 'armv7_v15'], 'release')  # No failure expected
 
     with pytest.raises(TaskVerificationError):
-        _check_architectures_are_valid(['x86'])
+        _check_architectures_are_valid(['x86'], 'release')
 
     with pytest.raises(TaskVerificationError):
-        _check_architectures_are_valid(['x86', 'armv7_v11'])
+        _check_architectures_are_valid(['x86', 'armv7_v11'], 'release')
 
     with pytest.raises(TaskVerificationError):
-        _check_architectures_are_valid(['x86', 'armv7_v11', 'armv7_v15'])
+        _check_architectures_are_valid(['x86', 'armv7_v11', 'armv7_v15'], 'release')
