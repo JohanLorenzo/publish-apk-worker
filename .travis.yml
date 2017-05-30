@@ -12,10 +12,10 @@ addons:
   apt:
     packages:
       - openjdk-7-jdk
-      - openjdk-7-jdk-set-default
 
 install:
     - travis_retry pip install tox
+    - jdk_switcher use openjdk7
 script:
     - java -version
     - tox -e py35
