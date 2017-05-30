@@ -48,7 +48,6 @@ class ConfigFileGenerator(object):
             "schema_file": "{project_data_dir}/pushapk_task_schema.json",
             "verbose": true,
 
-            "jarsigner_binary": "/usr/lib/jvm/java-8-openjdk-amd64/bin/jarsigner",
             "jarsigner_key_store": "{keystore_path}",
             "jarsigner_certificate_alias": "{certificate_alias}",
             "google_play_accounts": {{
