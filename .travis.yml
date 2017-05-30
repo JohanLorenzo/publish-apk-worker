@@ -11,7 +11,8 @@ env:
 addons:
   apt:
     packages:
-      - openjdk-8-jdk
+      - openjdk-7-jdk
+      - openjdk-7-jdk-set-default
 
 install:
     - travis_retry pip install tox
