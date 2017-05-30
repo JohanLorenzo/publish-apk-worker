@@ -15,7 +15,7 @@ _EXPECTED_MOZAPKPUBLISHER_ARCHITECTURES_PER_CHANNEL = {
 }
 
 
-def sort_and_check_apks_per_architectures(apks_paths, channel='release'):
+def sort_and_check_apks_per_architectures(apks_paths, channel):
     apks_per_architectures = {
         _convert_architecture_to_mozapkpublisher(_get_apk_architecture(apk_path)): apk_path
         for apk_path in apks_paths
@@ -63,7 +63,12 @@ def _extract_architecture_from_paths(apk_path, paths):
 
 
 def _check_architectures_are_valid(mozapkpublisher_architectures, channel):
-    expected_architectures = _EXPECTED_MOZAPKPUBLISHER_ARCHITECTURES_PER_CHANNEL[channel]
+    try:
+        expected_architectures = _EXPECTED_MOZAPKPUBLISHER_ARCHITECTURES_PER_CHANNEL[channel]
+    except KeyError:
+        raise TaskVerificationError('"{}" is not an expected channel. Allowed values: {}'.format(
+            channel, _EXPECTED_MOZAPKPUBLISHER_ARCHITECTURES_PER_CHANNEL.keys()
+        ))
 
     are_all_architectures_present = all(
         expected_architecture in mozapkpublisher_architectures
