@@ -8,6 +8,11 @@ python:
 env:
   - SKIP_NETWORK_TESTS=0
 
+addons:
+  apt:
+    packages:
+      - openjdk-7-jdk
+
 install:
     - travis_retry pip install tox
 script:
