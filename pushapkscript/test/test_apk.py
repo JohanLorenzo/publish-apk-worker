@@ -38,30 +38,6 @@ def test_convert_architecture_to_mozapkpublisher():
     assert _convert_architecture_to_mozapkpublisher('armeabi-v7a') == 'armv7_v15'
 
 
-def test_get_apk_architecture():
-    with TemporaryDirectory() as temp_dir:
-        assert _get_apk_architecture(_create_apk(temp_dir, 'x86')) == 'x86'
-        assert _get_apk_architecture(_create_apk(temp_dir, 'armeabi-v7a')) == 'armeabi-v7a'
-
-        with pytest.raises(TaskVerificationError):
-            _get_apk_architecture(_create_apk(temp_dir, architecture=None))
-
-
-def test_extract_architecture_from_paths():
-    assert _extract_architecture_from_paths(
-        '/path/to/apk', ['lib/armeabi-v7a/libmozglue.so', 'lib/armeabi-v7a/libplugin-container.so']
-    ) == 'armeabi-v7a'
-    assert _extract_architecture_from_paths(
-        '/path/to/apk', ['lib/x86/libmozglue.so', 'lib/x86/libplugin-container.so']
-    ) == 'x86'
-
-    with pytest.raises(TaskVerificationError):
-        _extract_architecture_from_paths('/path/to/apk', ['lib/'])
-
-    with pytest.raises(TaskVerificationError):
-        _extract_architecture_from_paths('/path/to/apk', ['lib/armeabi-v7a/libmozglue.so', 'lib/x86/libmozglue.so'])
-
-
 def test_check_architectures_are_valid():
     _check_architectures_are_valid(['x86', 'armv7_v15'], 'aurora')  # No failure expected
     _check_architectures_are_valid(['x86', 'armv7_v15'], 'beta')
