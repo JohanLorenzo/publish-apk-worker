@@ -20,6 +20,3 @@ script:
     - tox -e py35
 after_success:
     - tox -e py35-coveralls
-
-# http://docs.travis-ci.com/user/workers/container-based-infrastructure/
-sudo: false
