@@ -3,12 +3,13 @@ import json
 
 
 class TaskGenerator(object):
-    def __init__(self, google_play_track='alpha', rollout_percentage=None, google_play_strings_task=True):
+    def __init__(self, google_play_track='alpha', rollout_percentage=None, task_def_before_firefox_59=False, should_commit_transaction=False):
         self.arm_task_id = 'fwk3elTDSe6FLoqg14piWg'
         self.x86_task_id = 'PKP2v4y0RdqOuLCqhevD2A'
-        self.google_play_strings_task = google_play_strings_task
-        if self.google_play_strings_task is True:
+        self.task_def_before_firefox_59 = task_def_before_firefox_59
+        if self.task_def_before_firefox_59 is False:
             self.google_play_strings_task_id = 'bgP9T6AnTpyTVsNA7M3OnA'
+        self.should_commit_transaction = should_commit_transaction
         self.google_play_track = google_play_track
         self.rollout_percentage = rollout_percentage
 
@@ -52,12 +53,18 @@ class TaskGenerator(object):
         if self.rollout_percentage:
             json_content['payload']['rollout_percentage'] = self.rollout_percentage
 
-        if self.google_play_strings_task:
+        if self.task_def_before_firefox_59 is False:
             json_content['payload']['upstreamArtifacts'].append({
                'paths': ['public/google_play_strings.json'],
                'taskId': self.google_play_strings_task_id,
                'taskType': 'fetch',
                'optional': True,
              })
+
+        if self.should_commit_transaction:
+            if self.task_def_before_firefox_59:
+                json_content['payload']['dry_run'] = False
+            else:
+                json_content['payload']['commit'] = True
 
         return json_content

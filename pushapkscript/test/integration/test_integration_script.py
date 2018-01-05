@@ -133,8 +133,8 @@ class MainTest(unittest.TestCase):
         })
 
     @unittest.mock.patch('mozapkpublisher.push_apk.PushAPK')
-    def test_main_allows_google_play_strings_file(self, PushAPK):
-        task_generator = TaskGenerator()
+    def test_main_allows_google_play_strings_file_and_commit_transaction(self, PushAPK):
+        task_generator = TaskGenerator(should_commit_transaction=True)
         task_generator.generate_file(self.config_generator.work_dir)
 
         self._copy_all_apks_to_test_temp_dir(task_generator)
@@ -149,7 +149,7 @@ class MainTest(unittest.TestCase):
             'apk_armv7_v15': '{}/work/cot/{}/public/build/target.apk'.format(self.test_temp_dir, task_generator.arm_task_id),
             'apk_x86': '{}/work/cot/{}/public/build/target.apk'.format(self.test_temp_dir, task_generator.x86_task_id),
             'credentials': '/dummy/path/to/certificate.p12',
-            'commit': False,
+            'commit': True,
             'package_name': 'org.mozilla.fennec_aurora',
             'service_account': 'dummy-service-account@iam.gserviceaccount.com',
             'track': 'alpha',
@@ -159,8 +159,8 @@ class MainTest(unittest.TestCase):
         })
 
     @unittest.mock.patch('mozapkpublisher.push_apk.PushAPK')
-    def test_main_still_supports_task_def_without_google_play_strings_task(self, PushAPK):
-        task_generator = TaskGenerator(google_play_strings_task=False)
+    def test_main_still_supports_old_task_def(self, PushAPK):
+        task_generator = TaskGenerator(task_def_before_firefox_59=True, should_commit_transaction=True)
         task_generator.generate_file(self.config_generator.work_dir)
 
         self._copy_all_apks_to_test_temp_dir(task_generator)
@@ -170,7 +170,7 @@ class MainTest(unittest.TestCase):
             'apk_armv7_v15': '{}/work/cot/{}/public/build/target.apk'.format(self.test_temp_dir, task_generator.arm_task_id),
             'apk_x86': '{}/work/cot/{}/public/build/target.apk'.format(self.test_temp_dir, task_generator.x86_task_id),
             'credentials': '/dummy/path/to/certificate.p12',
-            'commit': False,
+            'commit': True,
             'package_name': 'org.mozilla.fennec_aurora',
             'service_account': 'dummy-service-account@iam.gserviceaccount.com',
             'track': 'alpha',
