@@ -56,6 +56,8 @@ async def async_main(context):
         # TODO: Remove this special catch once Firefox 59 reaches mozilla-release.
         # It allows older trees (that don't have a task to fetch GP strings) to fetch
         # strings in the push-apk job
+        log.warn('No Google Play string task defined in upstreamArtifacts. This is considered as a legacy task definition.\
+This behavior is deprecated and will be removed after Firefox 59 reaches mozilla-release.')
         google_play_strings_path = None
         let_mozapkpublisher_download_google_play_strings = True
 
