@@ -19,7 +19,8 @@ class JarSignerTest(unittest.TestCase):
                 'beta': 'beta_alias',
                 'release': 'release_alias',
                 'dep': 'dep_alias',
-            }
+            },
+            'taskcluster_scope_prefix': 'project:releng:googleplay:',
         }
         self.context.task = {
             'scopes': ['project:releng:googleplay:aurora'],
@@ -28,14 +29,15 @@ class JarSignerTest(unittest.TestCase):
         self.minimal_context = MagicMock()
         self.minimal_context.config = {
             'jarsigner_key_store': '/path/to/keystore',
+            'taskcluster_scope_prefix': 'project:releng:googleplay:',
         }
         self.minimal_context.task = {
             'scopes': ['project:releng:googleplay:aurora'],
         }
 
     def test_verify_should_call_executable_with_right_arguments(self):
-        for channel, alias in self.context.config['jarsigner_certificate_aliases'].items():
-            self.context.task['scopes'] = ['project:releng:googleplay:{}'.format(channel)]
+        for android_product, alias in self.context.config['jarsigner_certificate_aliases'].items():
+            self.context.task['scopes'] = ['project:releng:googleplay:{}'.format(android_product)]
             with patch('subprocess.run') as run:
                 run.return_value = MagicMock()
                 run.return_value.returncode = 0

@@ -3,7 +3,7 @@ import re
 import subprocess
 
 from pushapkscript.exceptions import SignatureError
-from pushapkscript.task import extract_channel
+from pushapkscript.task import extract_android_product_from_scopes
 
 log = logging.getLogger(__name__)
 
@@ -11,8 +11,8 @@ DIGEST_ALGORITHM_REGEX = re.compile(r'\s*Digest algorithm: (\S+)$', re.MULTILINE
 
 
 def verify(context, apk_path):
-    binary_path, keystore_path, certificate_aliases, channel = _pluck_configuration(context)
-    certificate_alias = certificate_aliases[channel]
+    binary_path, keystore_path, certificate_aliases, android_product = _pluck_configuration(context)
+    certificate_alias = certificate_aliases[android_product]
 
     completed_process = subprocess.run([
         binary_path, '-verify', '-strict',
@@ -68,5 +68,5 @@ def _pluck_configuration(context):
         'release': 'release',
         'dep': 'dep',
     })
-    channel = extract_channel(context.task)
-    return binary_path, keystore_path, certificate_aliases, channel
+    android_product = extract_android_product_from_scopes(context)
+    return binary_path, keystore_path, certificate_aliases, android_product
