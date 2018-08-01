@@ -17,9 +17,6 @@ matrix:
         TOXENV=py37
         JDK_SWITCH=openjdk8
 
-env:
-  - SKIP_NETWORK_TESTS=0
-
 install:
     - travis_retry pip install tox
     - jdk_switcher use "${JDK_SWITCH}"
