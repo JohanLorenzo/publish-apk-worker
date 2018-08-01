@@ -26,5 +26,4 @@ install:
 script:
     - java -version
     - tox -e "$TOXENV"
-after_success:
     - if [[ $TOXENV == 'py36' ]] ; then tox -e py36-coveralls; else echo "No coverage to do"; fi
