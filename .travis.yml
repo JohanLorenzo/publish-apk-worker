@@ -10,20 +10,12 @@ matrix:
       env:
         TOXENV=py36
         JDK_SWITCH=openjdk7
-      addons:
-        apt:
-          packages:
-            - openjdk-7-jdk
     - python: 3.7
       # from https://github.com/travis-ci/travis-ci/issues/9815#issuecomment-401756442
       dist: xenial
       env:
         TOXENV=py37
         JDK_SWITCH=openjdk8
-      addons:
-        apt:
-          packages:
-            - openjdk-8-jdk
 
 env:
   - SKIP_NETWORK_TESTS=0
