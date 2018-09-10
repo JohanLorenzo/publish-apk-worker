@@ -94,17 +94,6 @@ Follow the [scriptworker readme](https://github.com/mozilla-releng/scriptworker/
 :warning: Make sure your `work_dir` and `artifact_dir` point to the same directories between the scriptworker config and the pushapkscript config!
 
 
-## Docs
-
-`README.md` is the master readme, and `README.rst` is generated via
-
-    pandoc --from=markdown --to=rst README.md > README.rst
-
-This is purely because
-
-1. @escapewindow prefers writing markdown, and
-1. pypi appears to deal with rst better than markdown.
-
 ## Frequently asked questions
 
 ### I'd like to test out changes in pushapkscript...
