@@ -124,7 +124,7 @@ There used to be one, but it's now decommissioned. You can spawn a new instance 
 1. Edit your tasks to point to the [dev worker group](https://dxr.mozilla.org/build-central/rev/e2e751bce7198d358725904a9130bbb06a26c0f9/puppet/modules/pushapk_scriptworker/manifests/settings.pp#9).
 1. On your VM, make the slave [take the config of your user environment](https://wiki.mozilla.org/ReleaseEngineering/PuppetAgain/HowTo/Set_up_a_user_environment#On_the_slave_node.28s.29).
 
-:warning: Like [explained below](#is-there-an-instance-which-doesnt-interact-with-production-data), this instance will interact with the production instance of Google Play. Please keep `"dry_run": true` in your task definitions (or don't define it).
+:warning: Like [explained below](#is-there-an-instance-which-doesnt-interact-with-production-data), this instance will interact with the production instance of Google Play. Please make sure `"commit": false` is in your task definitions (or don't define it).
 
 ### I'd like to test out Taskcluster tasks...
 
@@ -136,13 +136,15 @@ Sadly, no. The Google Play documentation doesn't mention any server we can plug 
 
 There are 3 incremental ways to avoid targetting real users (or the entire user base):
 
-##### 1. Use `"dry_run": true` in your task definition.
+##### 1. Use `"commit": false` in your task definition.
 
 This will execute every step implemented in pushapkscript, but the last one, which commits the transaction to the Play store.
 
 This allows to publish the same APK several times.
 
 However, there are a few final checks that Google Play does only when the transaction is committed. We have already experienced one: the integrity of l10n stores (descriptions and "what's new" sections) is verified only at this time. We may extrapolate the behavior to: everything that can be done in several calls to Google Play will be checked at commit time.
+
+If not defined in the task payload, `commit` defaults to `false`.
 
 ##### 2. Push to a closed alpha track
 
