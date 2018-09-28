@@ -110,7 +110,7 @@ There used to be one, but it's now decommissioned. You can spawn a new instance 
 1. On the [puppet master node](https://dxr.mozilla.org/build-central/rev/e2e751bce7198d358725904a9130bbb06a26c0f9/puppet/manifests/moco-config.pp#78), [set up a user environment](https://wiki.mozilla.org/ReleaseEngineering/PuppetAgain/HowTo/Set_up_a_user_environment).
 1. Add a new node to [moco-nodes.pp](https://dxr.mozilla.org/build-central/rev/e2e751bce7198d358725904a9130bbb06a26c0f9/puppet/manifests/moco-nodes.pp#1069). The config example is present in this repo at `examples/puppet-node.example.pp`.
 1. Activate chain of trust [by creating the gpg keys and whitelisting them](http://scriptworker.readthedocs.io/en/latest/chain_of_trust.html#gpg-key-management). Otherwise, artifacts won't be downloaded.
-1. Edit your tasks to point to the [dev worker group](https://dxr.mozilla.org/build-central/rev/e2e751bce7198d358725904a9130bbb06a26c0f9/puppet/modules/pushapk_scriptworker/manifests/settings.pp#9).
+1. Edit your tasks to point to a different worker-type. Define it at your will. Please do not use the `dep` pool because it's used outside of releng, in `try` for example.
 1. On your VM, make the slave [take the config of your user environment](https://wiki.mozilla.org/ReleaseEngineering/PuppetAgain/HowTo/Set_up_a_user_environment#On_the_slave_node.28s.29).
 
 :warning: Like [explained below](#is-there-an-instance-which-doesnt-interact-with-production-data), this instance will interact with the production instance of Google Play. Please make sure `"commit": false` is in your task definitions (or don't define it).
