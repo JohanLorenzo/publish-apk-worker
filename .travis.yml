@@ -1,25 +1,25 @@
 sudo: required  # Needed to install a recent version of OpenJDK as well as Python 3.7
+dist: xenial
 
 language: python
+
+env:
+  - JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 
 matrix:
   fast_finish: true
   include:
     - python: 3.6
       env:
-        TOXENV=py36
-        JDK_SWITCH=openjdk7
+        - TOXENV=py36
     - python: 3.7
-      # from https://github.com/travis-ci/travis-ci/issues/9815#issuecomment-401756442
-      dist: xenial
       env:
-        TOXENV=py37
-        JDK_SWITCH=openjdk8
+        - TOXENV=py37
+
 
 install:
     - travis_retry pip install tox
-    - jdk_switcher use "${JDK_SWITCH}"
 script:
-    - java -version
+    - "$JAVA_HOME/bin/java" -version
     - tox -e "$TOXENV"
     - if [[ $TOXENV == 'py36' ]] ; then tox -e py36-coveralls; else echo "No coverage to do"; fi

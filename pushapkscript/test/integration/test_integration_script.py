@@ -15,6 +15,12 @@ project_data_dir = os.path.join(project_dir, 'pushapkscript', 'data')
 test_data_dir = os.path.join(this_dir, '..', 'data')
 
 
+def _get_java_path(tool_name):
+    if os.environ.get('JAVA_HOME'):
+        return os.path.join(os.environ['JAVA_HOME'], 'bin', tool_name)
+    return tool_name
+
+
 class KeystoreManager(object):
     def __init__(self, test_data_dir, certificate_alias='nightly', keystore_password='12345678'):
         self.keystore_path = os.path.join(test_data_dir, 'keystore')
@@ -23,7 +29,7 @@ class KeystoreManager(object):
 
     def add_certificate(self, certificate_path):
         subprocess.run([
-            'keytool', '-import', '-noprompt',
+            _get_java_path('keytool'), '-import', '-noprompt',
             '-keystore', self.keystore_path, '-storepass', self.keystore_password,
             '-file', certificate_path, '-alias', self.certificate_alias
         ])
@@ -49,6 +55,7 @@ class ConfigFileGenerator(object):
             "schema_file": "{project_data_dir}/pushapk_task_schema.json",
             "verbose": true,
 
+            "jarsigner_binary": "{binary}",
             "jarsigner_key_store": "{keystore_path}",
             "jarsigner_certificate_alias": "{certificate_alias}",
             "google_play_accounts": {{
@@ -60,7 +67,7 @@ class ConfigFileGenerator(object):
             "taskcluster_scope_prefix": "project:releng:googleplay:"
         }}'''.format(
             work_dir=self.work_dir, test_data_dir=self.test_data_dir, project_data_dir=project_data_dir,
-            keystore_path=self.keystore_manager.keystore_path,
+            binary=_get_java_path('jarsigner'), keystore_path=self.keystore_manager.keystore_path,
             certificate_alias=self.keystore_manager.certificate_alias
         ))
 
