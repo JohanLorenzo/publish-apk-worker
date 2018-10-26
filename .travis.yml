@@ -20,6 +20,6 @@ matrix:
 install:
     - travis_retry pip install tox
 script:
-    - "$JAVA_HOME/bin/java" -version
+    - $JAVA_HOME/bin/java -version
     - tox -e "$TOXENV"
     - if [[ $TOXENV == 'py36' ]] ; then tox -e py36-coveralls; else echo "No coverage to do"; fi
