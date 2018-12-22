@@ -11,17 +11,13 @@ from pushapkscript.test.helpers.task_generator import TaskGenerator
 
 
 @pytest.fixture
-def context():
-    context_ = Context()
-    context_.config = {
-        'schema_file': os.path.join(os.path.dirname(pushapkscript.__file__), 'data/pushapk_task_schema.json'),
-    }
-    return context_
+def schema():
+    return os.path.join(os.path.dirname(pushapkscript.__file__), 'data/pushapk_task_schema.json')
 
 
-def test_validate_task(context):
-    context.task = TaskGenerator().generate_json()
-    validate_task_schema(context)
+def test_validate_task(schema):
+    task = TaskGenerator().generate_json()
+    validate_task_schema(task=task, schema=schema)
 
 
 # TODO Add real life release task
@@ -98,9 +94,8 @@ def test_validate_task(context):
         }
     },
 ))
-def test_validate_real_life_tasks(context, task):
-    context.task = task
-    validate_task_schema(context)
+def test_validate_real_life_tasks(schema, task):
+    validate_task_schema(task=task, schema=schema)
 
 
 @pytest.mark.parametrize('prefixes, scopes, raises, expected', ((
@@ -170,9 +165,12 @@ def test_validate_real_life_tasks(context, task):
     True,
     None,
 )))
-def test_extract_supported_android_products(context, prefixes, scopes, raises, expected):
+def test_extract_supported_android_products(prefixes, scopes, raises, expected):
+    context = Context()
     context.task = {'scopes': scopes}
-    context.config = {'taskcluster_scope_prefixes': prefixes}
+    context.config = {
+        'taskcluster_scope_prefixes': prefixes
+    }
 
     if raises:
         with pytest.raises(TaskVerificationError):
