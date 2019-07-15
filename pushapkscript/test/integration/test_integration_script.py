@@ -6,6 +6,8 @@ import subprocess
 import tempfile
 import unittest
 
+from mozapkpublisher.common.googleplay import StaticTrack, RolloutTrack
+
 from pushapkscript.script import main
 from pushapkscript.test.helpers.mock_file import mock_open, MockFile
 from pushapkscript.test.helpers.task_generator import TaskGenerator
@@ -152,7 +154,7 @@ class ConfigFileGenerator(object):
 
 
 @unittest.mock.patch('pushapkscript.script.open', new=mock_open)
-@unittest.mock.patch('pushapkscript.googleplay.open', new=mock_open)
+@unittest.mock.patch('pushapkscript.googleplay.GooglePlayConnection.open', new=lambda account, creds: (account, creds))
 class MainTest(unittest.TestCase):
 
     def setUp(self):
@@ -208,13 +210,10 @@ class MainTest(unittest.TestCase):
                 MockFile(
                     '{}/work/cot/{}/public/build/target.apk'.format(self.test_temp_dir, task_generator.x86_task_id)),
             ],
-            service_account='firefox-aurora@iam.gserviceaccount.com',
-            google_play_credentials_file=MockFile('/firefox-nightly.p12'),
-            track='beta',
+            connection=('firefox-aurora@iam.gserviceaccount.com', '/firefox-nightly.p12'),
+            track=StaticTrack('beta'),
             expected_package_names=['org.mozilla.fennec_aurora'],
-            rollout_percentage=None,
             commit=False,
-            contact_google_play=True,
             skip_check_multiple_locales=False,
             skip_check_ordered_version_codes=False,
             skip_check_same_locales=False,
@@ -237,13 +236,10 @@ class MainTest(unittest.TestCase):
                 MockFile(
                     '{}/work/cot/{}/public/build/target.apk'.format(self.test_temp_dir, task_generator.x86_task_id)),
             ],
-            service_account='focus@iam.gserviceaccount.com',
-            google_play_credentials_file=MockFile('/focus.p12'),
-            track='production',
+            connection=('focus@iam.gserviceaccount.com', '/focus.p12'),
+            track=StaticTrack('production'),
             expected_package_names=['org.mozilla.focus', 'org.mozilla.klar'],
-            rollout_percentage=None,
             commit=False,
-            contact_google_play=True,
             skip_check_multiple_locales=False,
             skip_check_ordered_version_codes=True,
             skip_check_same_locales=False,
@@ -266,13 +262,10 @@ class MainTest(unittest.TestCase):
                 MockFile(
                     '{}/work/cot/{}/public/build/target.apk'.format(self.test_temp_dir, task_generator.x86_task_id)),
             ],
-            service_account='fenix-nightly@iam.gserviceaccount.com',
-            google_play_credentials_file=MockFile('/fenix-nightly.p12'),
-            track='beta',
+            connection=('fenix-nightly@iam.gserviceaccount.com', '/fenix-nightly.p12'),
+            track=StaticTrack('beta'),
             expected_package_names=['org.mozilla.fenix.nightly'],
-            rollout_percentage=None,
             commit=False,
-            contact_google_play=True,
             skip_check_multiple_locales=True,
             skip_check_ordered_version_codes=False,
             skip_check_same_locales=True,
@@ -295,13 +288,10 @@ class MainTest(unittest.TestCase):
                 MockFile(
                     '{}/work/cot/{}/public/build/target.apk'.format(self.test_temp_dir, task_generator.x86_task_id)),
             ],
-            service_account='firefox-aurora@iam.gserviceaccount.com',
-            google_play_credentials_file=MockFile('/firefox-nightly.p12'),
-            track='beta',
+            connection=('firefox-aurora@iam.gserviceaccount.com', '/firefox-nightly.p12'),
+            track=StaticTrack('beta'),
             expected_package_names=['org.mozilla.fennec_aurora'],
-            rollout_percentage=None,
             commit=False,
-            contact_google_play=True,
             skip_check_multiple_locales=False,
             skip_check_ordered_version_codes=False,
             skip_check_same_locales=False,
@@ -324,13 +314,10 @@ class MainTest(unittest.TestCase):
                 MockFile(
                     '{}/work/cot/{}/public/build/target.apk'.format(self.test_temp_dir, task_generator.x86_task_id)),
             ],
-            service_account='firefox-aurora@iam.gserviceaccount.com',
-            google_play_credentials_file=MockFile('/firefox-nightly.p12'),
-            track='rollout',
+            connection=('firefox-aurora@iam.gserviceaccount.com', '/firefox-nightly.p12'),
+            track=RolloutTrack(0.25),
             expected_package_names=['org.mozilla.fennec_aurora'],
-            rollout_percentage=25,
             commit=False,
-            contact_google_play=True,
             skip_check_multiple_locales=False,
             skip_check_ordered_version_codes=False,
             skip_check_same_locales=False,
@@ -354,13 +341,10 @@ class MainTest(unittest.TestCase):
                 MockFile(
                     '{}/work/cot/{}/public/build/target.apk'.format(self.test_temp_dir, task_generator.x86_task_id)),
             ],
-            service_account='firefox-aurora@iam.gserviceaccount.com',
-            google_play_credentials_file=MockFile('/firefox-nightly.p12'),
-            track='beta',
+            connection=('firefox-aurora@iam.gserviceaccount.com', '/firefox-nightly.p12'),
+            track=StaticTrack('beta'),
             expected_package_names=['org.mozilla.fennec_aurora'],
-            rollout_percentage=None,
             commit=True,
-            contact_google_play=True,
             skip_check_multiple_locales=False,
             skip_check_ordered_version_codes=False,
             skip_check_same_locales=False,
