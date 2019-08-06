@@ -28,7 +28,7 @@ tasks:
         $if: 'tasks_for == "github-release" && event.repository.full_name == "mozilla-releng/${project_name}script"'
         then: '&& apk -U add jq && ./docker.d/push_image.sh'
         else:
-          $if: 'tasks_for == "github-push" && event.ref in ["refs/heads/master", "refs/heads/dev", "refs/heads/stage"]'
+          $if: 'tasks_for == "github-push" && event.ref in ["refs/heads/master", "refs/heads/dev"]'
           then: '&& apk -U add jq && ./docker.d/push_image.sh'
           else: ''
 
