@@ -22,19 +22,8 @@ tasks:
     owner: '${event.sender.login}@users.noreply.github.com'
 
     push_docker_image:
-      $if: 'tasks_for == "github-pull-request"'
-      then: ''
-      else:
-        $if: 'tasks_for == "github-release" && event.repository.full_name == "mozilla-releng/${project_name}script"'
-        then: '&& apk -U add jq && ./docker.d/push_image.sh'
-        else:
-          $if: 'tasks_for == "github-push" && event.ref in ["refs/heads/master", "refs/heads/dev"]'
-          then: '&& apk -U add jq && ./docker.d/push_image.sh'
-          else: ''
-
-    docker_release_tag:
-      $if: 'tasks_for == "github-release"'
-      then: '${event.release.tag_name}'
+      $if: 'tasks_for == "github-push" && event.ref in ["refs/heads/dev", "refs/heads/prod"]'
+      then: '&& apk -U add jq && ./docker.d/push_image.sh'
       else: ''
 
     docker_tag:
@@ -98,7 +87,6 @@ tasks:
           DOCKERHUB_USER: 'mozillarelengservices'
           DOCKER_TAG: '${docker_tag}'
           DOCKER_REPO: 'mozilla/releng-${project_name}script'
-          DOCKER_RELEASE_TAG: '${docker_release_tag}'
           GIT_HEAD_REV: '${head_rev}'
           PROJECT_NAME: '${project_name}'
         command:
