@@ -5,7 +5,17 @@ set -e
 # == END:   this is what we need to configure ==
 
 case $ENV in
-  dep|prod)
+  prod)
+    export TRUST_LEVEL=3
+    export WORKER_SUFFIX=
+    ;;
+  fake-prod)
+    export TRUST_LEVEL=t
+    export WORKER_SUFFIX=
+    ;;
+  dev)
+    export TRUST_LEVEL=1
+    export WORKER_SUFFIX="-dev"
     ;;
   *)
     exit 1
@@ -14,8 +24,9 @@ esac
 
 case $COT_PRODUCT in
   firefox)
+    export TRUST_DOMAIN=gecko
     case $ENV in
-      dep)
+      fake-prod)
         ;;
       prod)
         ;;
@@ -25,8 +36,9 @@ case $COT_PRODUCT in
     esac
     ;;
   mobile)
+    export TRUST_DOMAIN=mobile
     case $ENV in
-      dep)
+      fake-prod)
         ;;
       prod)
     test $GOOGLE_PLAY_SERVICE_ACCOUNT_FENIX_NIGHTLY

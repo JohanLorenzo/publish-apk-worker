@@ -23,10 +23,7 @@ if [ "$ENV" == "prod" ]; then
 fi
 # == END:   this is what we need to configure ==
 
-export PROVISIONER_ID=scriptworker-k8s-v1
-export WORKER_GROUP="${PROJECT_NAME}script-${COT_PRODUCT}-${ENV}-v1"
-export WORKER_TYPE="${PROJECT_NAME}script-${COT_PRODUCT}-${ENV}-v1"
-export WORKER_ID_PREFIX="${PROJECT_NAME}script-${COT_PRODUCT}-${ENV}-"
+export PROVISIONER_ID=scriptworker-k8s
 export TASK_SCRIPT=/app/bin/${PROJECT_NAME}script
 export VERBOSE=true
 export ARTIFACT_UPLOAD_TIMEOUT=1200
@@ -45,6 +42,10 @@ fi
 mkdir -p -m 700 $CONFIG_DIR
 
 source $(dirname $0)/init_worker.sh
+
+export WORKER_TYPE="${TRUST_DOMAIN}-${TRUST_LEVEL}-${PROJECT_NAME}"
+export WORKER_GROUP=$WORKER_TYPE
+export WORKER_ID_PREFIX="${WORKER_TYPE}-"
 
 $CONFIG_LOADER --worker-id-prefix=$WORKER_ID_PREFIX $TEMPLATE_DIR/scriptworker.yml $CONFIG_DIR/scriptworker.json
 $CONFIG_LOADER $TEMPLATE_DIR/worker.yml $CONFIG_DIR/worker.json
