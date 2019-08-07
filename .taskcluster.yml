@@ -56,6 +56,7 @@ tasks:
             mv ${project_name}script-${head_rev} /src &&
             cd /src &&
             pip install tox &&
+            apt-get update && apt-get install default-jdk &&
             tox -e ${python_version}
       metadata:
         name: 'tox ${python_version} (${docker_tag})'
