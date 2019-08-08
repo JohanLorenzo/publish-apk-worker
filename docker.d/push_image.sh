@@ -5,6 +5,7 @@ test $DOCKERHUB_EMAIL
 test $DOCKERHUB_USER
 test $DOCKER_REPO
 test $DOCKER_TAG
+test $GIT_HEAD_REV
 test $PUSH_DOCKER_IMAGE
 test $SECRET_URL
 
@@ -15,7 +16,7 @@ fi
 apk -U add jq
 
 echo "=== Re-tagging docker image ==="
-export DOCKER_ARCHIVE_TAG="${DOCKER_TAG}-$(cat ./version.txt)-$(date +%Y%m%d%H%M%S)"
+export DOCKER_ARCHIVE_TAG="${DOCKER_TAG}-$(cat ./version.txt)-$(date +%Y%m%d%H%M%S)-${GIT_HEAD_REV}"
 docker tag $DOCKER_REPO:$DOCKER_TAG $DOCKER_REPO:$DOCKER_ARCHIVE_TAG
 
 echo "=== Logging to docker hub ==="
