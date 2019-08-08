@@ -104,7 +104,7 @@ products:
             - "org.mozilla.reference.browser"
           certificate_alias: "reference-browser"
 
-    'COT_PRODUCT == "mobile" && ENV == "dep"':
+    'COT_PRODUCT == "mobile" && ENV == "fake-prod"':
       - product_names: [ "fenix" ]
         digest_algorithm: "SHA-256"
         skip_check_multiple_locales: true
