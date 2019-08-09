@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-# == START: this is what we need to configure ==
-# == END:   this is what we need to configure ==
 
 case $COT_PRODUCT in
   firefox)
@@ -71,4 +69,23 @@ case $COT_PRODUCT in
     ;;
 esac
 
-export JARSIGNER_KEY_STORE="/app/mozilla-andoid-keystore"
+export JARSIGNER_KEY_STORE="/app/mozilla-android-keystore"
+
+# TODO: based on COT_PRODUCT and ENV we need to read from
+#export JARSIGNER_KEY_STORE_CERTIFICATE=...
+# TODO: dep, nightly, release, fenix, focus, reference-browser, fenix-nightly,
+#       fenix-beta, fenix-production
+#export JARSIGNER_KEY_STORE_NAME=...
+# TODO: i dont think we need this
+#export JARSIGNER_KEY_STORE_PASSWORD=...
+
+#keytool \
+#  -importcert \
+#  -noprompt \
+#  -alias $JARSIGNER_KEY_STORE_NAME \
+#  -file $JARSIGNER_KEY_STORE_CERTIFICATE \
+#  -keystore $JARSIGNER_KEY_STORE \
+#  -trustcacerts \
+#  # TODO: i don't think we need this
+#  -srcstorepass $JARSIGNER_KEY_STORE_PASSWORD \
+#  -deststorepass $JARSIGNER_KEY_STORE_PASSWORD
