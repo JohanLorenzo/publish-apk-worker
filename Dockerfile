@@ -5,7 +5,7 @@ RUN groupadd --gid 10001 app && \
 
 RUN apt-get update \
  && apt-get install -y default-jdk \
- && ln -s /app/docker.d/bin/healthcheck /bin/healthcheck
+ && ln -s /app/docker.d/healthcheck /bin/healthcheck
 
 USER app
 WORKDIR /app
