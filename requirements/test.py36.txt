@@ -45,9 +45,9 @@ entrypoints==0.3 \
 flake8==3.7.8 \
     --hash=sha256:19241c1cbc971b9962473e4438a2ca19749a7dd002dd1a946eaba171b4114548 \
     --hash=sha256:8e9dfa3cecb2400b3738a42c54c3043e821682b9c840b0448c0503f781130696
-importlib-metadata==0.18 \
-    --hash=sha256:6dfd58dfe281e8d240937776065dd3624ad5469c835248219bd16cf2e12dbeb7 \
-    --hash=sha256:cb6ee23b46173539939964df59d3d72c3e0c1b5d54b84f1d8a7e912fe43612db \
+importlib-metadata==0.19 \
+    --hash=sha256:23d3d873e008a513952355379d93cbcab874c58f4f034ff657c7a87422fa64e8 \
+    --hash=sha256:80d2de76188eabfbfcf27e6a37342c2827801e59c4cc14b0371c56fed43820e3 \
     # via pluggy, pytest
 mccabe==0.6.1 \
     --hash=sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42 \
@@ -57,9 +57,9 @@ more-itertools==7.2.0 \
     --hash=sha256:409cd48d4db7052af495b09dec721011634af3753ae1ef92d2b32f73a745f832 \
     --hash=sha256:92b8c4b06dac4f0611c0729b2f2ede52b2e1bac1ab48f089c7ddc12e26bb60c4 \
     # via pytest
-packaging==19.0 \
-    --hash=sha256:0c98a5d0be38ed775798ece1b9727178c4469d9c3b4ada66e8e6b7849f8732af \
-    --hash=sha256:9e1cbf8c12b1f1ce0bb5344b8d7ecf66a6f8a6e91bcb0c84593ed6d3ab5c4ab3 \
+packaging==19.1 \
+    --hash=sha256:a7ac867b97fdc07ee80a8058fe4435ccd274ecc3b0ed61d852d7d53055528cf9 \
+    --hash=sha256:c491ca87294da7cc01902edbe30a5bc6c4c28172b5138ab4e4aa1b9d7bfaeafe \
     # via pytest
 pluggy==0.12.0 \
     --hash=sha256:0825a152ac059776623854c1543d65a4ad408eb3d33ee114dff91e57ec6ae6fc \
