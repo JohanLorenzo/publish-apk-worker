@@ -40,7 +40,7 @@ sign_chain_of_trust:
   $eval: 'ENV == "prod"'
 verify_cot_signature:
   $eval: 'ENV == "prod"'
-cot_job_type: 'pushapk'
+cot_job_type: scriptworker
 cot_product:
   $eval: 'COT_PRODUCT'
 
