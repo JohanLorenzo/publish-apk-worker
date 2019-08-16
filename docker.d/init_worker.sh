@@ -3,6 +3,7 @@ set -e
 
 export JARSIGNER_KEY_STORE="/app/mozilla-android-keystore"
 rm -f "$JARSIGNER_KEY_STORE"
+# Generate a temporary password
 JARSIGNER_KEY_STORE_PASSWORD=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w30 | head -n1)
 CERT_DIR=/app/files
 
